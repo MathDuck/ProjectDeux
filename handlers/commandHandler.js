@@ -7,16 +7,17 @@ module.exports.run = client => {
     file.endsWith(".js")
   )) {
     const prop = require(`${filePath}/${cmd}`);
-    if (prop.name) client.commands.set(prop.help.name, prop);
+    if (prop.help.name) client.commands.set(prop.help.name, prop);
     else {
       console.log(
-        `${file} command is missing a help.name or help.name not a string - can't be loaded!`
+        `${cmd} command is missing a help.name or help.name not a string - can't be loaded!`
       );
       continue;
     }
-
-    if (prop.aliases && Array.isArray(prop.aliases))
-      prop.aliases.forEach(alias => client.aliases.set(alias, prop.name));
+    if (prop.help.aliases && Array.isArray(prop.help.aliases))
+      prop.help.aliases.forEach(alias => {
+        client.aliases.set(alias, prop.help.name);
+      });
   }
 
   console.log(`${client.commands.size} commandes chargées.`);
