@@ -12,7 +12,8 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
   name: "ping",
   aliases: ["pg", "test"],
-  description: "Envoie un ping et le temps de réponse du bot"
+  description: "Envoie un ping et le temps de réponse du bot",
+  category: "Divers"
 };
 
 module.exports.requirements = {

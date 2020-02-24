@@ -9,6 +9,7 @@
   "author": "Math",
   "license": "ISC",
   "dependencies": {
+    "common-tags": "^1.8.0",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.2.0",
     "path": "^0.12.7"
