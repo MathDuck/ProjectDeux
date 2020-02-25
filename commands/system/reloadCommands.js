@@ -32,7 +32,7 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
   name: "reload",
   aliases: ["rld"],
-  description: "Recharge les commandes",
+  description: "Recharge les commandes.",
   category: "Système"
 };
 

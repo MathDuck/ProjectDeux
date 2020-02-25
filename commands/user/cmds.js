@@ -22,9 +22,13 @@ module.exports.run = async (client, message, args) => {
       output += `\u200b\n== ${cat} ==\n`;
       currentCat = cat;
     }
+    let aliases = "";
+    if (c.help.aliases && Array.isArray(c.help.aliases)) {
+      aliases = `[alias: ${c.help.aliases}]`;
+    }
     output += `${prefix}${c.help.name}${" ".repeat(
       longest - c.help.name.length
-    )} :: ${c.help.description} [alias: ${c.help.aliases}]\n`;
+    )} :: ${c.help.description} ${aliases}\n`;
   });
   message.channel.send(output, {
     code: "asciidoc",
