@@ -31,23 +31,27 @@ module.exports = async (client, message) => {
     cmd.requirements.userPerms &&
     !message.member.permissions.has(cmd.requirements.userPerms)
   )
-    return reply(
-      `tu dois avoir les permissions suivantes pour exécuter cette commande: ${missingPerms(
-        message.member,
-        cmd.requirements.userPerms
-      )}`
-    ).then(msg => msg.delete({ timeout: 2000 }));
+    return message
+      .reply(
+        `tu dois avoir les permissions suivantes pour exécuter cette commande: ${missingPerms(
+          message.member,
+          cmd.requirements.userPerms
+        )}`
+      )
+      .then(msg => msg.delete({ timeout: 5000 }));
 
   if (
     cmd.requirements.clientPerms &&
     !message.guild.me.permissions.has(cmd.requirements.clientPerms)
   )
-    return reply(
-      `je n'ai pas les permissions suivantes pour exécuter cette commande: ${missingPerms(
-        message.guild.me,
-        cmd.requirements.clientPerms
-      )}`
-    ).then(msg => msg.delete({ timeout: 2000 }));
+    return message
+      .reply(
+        `je n'ai pas les permissions suivantes pour exécuter cette commande: ${missingPerms(
+          message.guild.me,
+          cmd.requirements.clientPerms
+        )}`
+      )
+      .then(msg => msg.delete({ timeout: 5000 }));
 
   if (cmd.limits && !message.member.permissions.has("ADMINISTRATOR")) {
     const current = client.limits.get(`${command}-${message.author.id}`);
@@ -71,13 +75,14 @@ module.exports = async (client, message) => {
 };
 
 const missingPerms = (member, perms) => {
-  const missingPerms = member.permissions.missing(perms).map(
-    str =>
-      `\`${str
-        .replace(/_/g, " ")
-        .toLowerCase()
-        .replace(/\b(\w)/g, char => char.toUpperCase())}\``
-  );
+  const missingPerms = member.permissions
+    .missing(perms)
+    .map(
+      str =>
+        `\`${str
+          .replace(/_/g, " ")
+          .replace(/\b(\w)/g, char => char.toUpperCase())}\``
+    );
 
   return missingPerms.length > 1
     ? `${missingPerms.slice(0, -1).join(", ")} et ${missingPerms.slice(-1)[0]}`
