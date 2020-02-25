@@ -2,14 +2,18 @@ const { stripIndents } = require("common-tags");
 const { MessageEmbed } = require("discord.js");
 
 module.exports.run = (client, message, args) => {
-  let member = message.mentions.members.first();
+  let member =
+    message.guild.members.cache.get(args[0]) ||
+    message.mentions.members.first();
 
   if (!args[0]) member = message.member;
 
-  if (!member)
+  if (!member) {
+    if (message.deletable) message.delete();
     return message
       .reply(`impossible de trouver ${args[0]}`)
       .then(msg => msg.delete({ timeout: 2000 }));
+  }
 
   // Member variables
   const joined = Intl.DateTimeFormat("fr-FR", {

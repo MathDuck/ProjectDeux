@@ -7,6 +7,7 @@ const {
   botStatus
 } = require("./config");
 const commandhandler = require("./handlers/commandHandler");
+const Enmap = require("enmap");
 const eventhandler = require("./handlers/EventHandler");
 require("dotenv").config();
 
@@ -19,8 +20,8 @@ const client = new Client({
 });
 
 //Collections
-client.commands = new Collection();
-client.aliases = new Collection();
+client.commands = new Enmap();
+client.aliases = new Enmap();
 client.limits = new Map();
 
 //Config

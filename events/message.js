@@ -18,6 +18,7 @@ module.exports = async (client, message) => {
   if (command.length === 0) return;
   let cmd = client.commands.get(command);
   if (!cmd) cmd = client.commands.get(client.aliases.get(command));
+  if (!cmd) return;
 
   if (!message.guild.me.permissions.has(["SEND_MESSAGES"])) return;
 
