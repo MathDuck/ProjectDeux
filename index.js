@@ -20,8 +20,8 @@ const client = new Client({
 });
 
 //Collections
-client.commands = new Enmap();
-client.aliases = new Enmap();
+client.commands = new Collection();
+client.aliases = new Collection();
 client.limits = new Map();
 
 //Config

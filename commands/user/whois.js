@@ -82,6 +82,7 @@ module.exports.help = {
   aliases: ["info"],
   description:
     "Donne des infos sur un utilisateur ou soi-même si aucun argument n'est donné.",
+  usage: "<>/<pseudo>",
   category: "Utilisateur"
 };
 

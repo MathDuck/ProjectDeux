@@ -16,7 +16,8 @@ module.exports.run = async (client, message, args) => {
 
 module.exports.help = {
   name: "restart",
-  description: "Redémarre le bot entièrement",
+  description: "Redémarre le bot entièrement.",
+  usage: "<>",
   category: "Système"
 };
 

@@ -33,6 +33,7 @@ module.exports.help = {
   name: "reload",
   aliases: ["rld"],
   description: "Recharge les commandes.",
+  usage: "<>/<commande>",
   category: "Système"
 };
 

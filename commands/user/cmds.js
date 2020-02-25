@@ -39,7 +39,8 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
   name: "cmds",
   aliases: ["cmd"],
-  description: "Renvoie la liste des commandes",
+  description: "Renvoie la liste des commandes.",
+  usage: "<>",
   category: "Utilisateur"
 };
 
