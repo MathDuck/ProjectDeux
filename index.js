@@ -7,7 +7,6 @@ const {
   botStatus
 } = require("./config");
 const commandhandler = require("./handlers/commandHandler");
-const Enmap = require("enmap");
 const eventhandler = require("./handlers/EventHandler");
 require("dotenv").config();
 
@@ -28,10 +27,11 @@ client.limits = new Map();
 client.prefix = prefix;
 client.where = where;
 
-//Commands
-commandhandler.run(client);
+const load = async () => {
+  await commandhandler.run(client);
+  await eventhandler.run(client);
+};
 
-//Events
-eventhandler.run(client);
+load();
 
 client.login(process.env.TOKEN);

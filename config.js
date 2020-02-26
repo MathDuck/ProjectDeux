@@ -1,5 +1,5 @@
 module.exports = {
-  owners: [],
+  owners: ["177064875661590528"],
   prefix: "!!",
   botActivityStatus: "No!",
   botActivityType: "WATCHING",

@@ -1,6 +1,7 @@
 const { prefix } = require("../../config");
 
 module.exports.run = async (client, message, args) => {
+  if (message.deletable) message.delete();
   const longest = client.commands.reduce(
     (long, str) => Math.max(long, str.length),
     0
@@ -22,14 +23,21 @@ module.exports.run = async (client, message, args) => {
       output += `\u200b\n== ${cat} ==\n`;
       currentCat = cat;
     }
+    let usage = "";
+    if (!c.help.usage.startsWith("<>")) {
+      usage = ` ${c.help.usage}`;
+    }
+
     let aliases = "";
     if (c.help.aliases && Array.isArray(c.help.aliases)) {
       aliases = `[alias: ${c.help.aliases}]`;
     }
-    output += `${prefix}${c.help.name}${" ".repeat(
+    output += `${prefix}${c.help.name}${usage}${" ".repeat(
       longest - c.help.name.length
     )} :: ${c.help.description} ${aliases}\n`;
   });
+
+  message.reply(`voici la liste des commandes:`);
   message.channel.send(output, {
     code: "asciidoc",
     split: { char: "\u200b" }

@@ -7,5 +7,7 @@ module.exports = client => {
 
   client.channels
     .fetch(logChannel)
-    .then(channel => channel.send("```Je suis en ligne sur " + where + "!```"));
+    .then(channel =>
+      channel.send(`\`\`\`Je suis en ligne sur ${where}!\`\`\``)
+    );
 };

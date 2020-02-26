@@ -1,26 +1,31 @@
 const { owners } = require("../config");
 
 module.exports = async (client, message) => {
-  if (message.author.bot) return;
-
   console.log(
     `Message reçu: "${message.content}" de ${message.author.username}`
   );
 
-  if (!message.content.startsWith(client.prefix)) return;
+  const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
+  const prefix = message.content.match(prefixMention)
+    ? message.content.match(prefixMention)[0]
+    : client.prefix;
 
-  const args = message.content.split(/ +/g);
-  const command = args
-    .shift()
-    .slice(client.prefix.length)
-    .toLowerCase();
+  const args = message.content
+    .slice(prefix.length)
+    .trim()
+    .split(/ +/g);
+  const command = args.shift().toLowerCase();
 
   if (command.length === 0) return;
   let cmd = client.commands.get(command);
   if (!cmd) cmd = client.commands.get(client.aliases.get(command));
-  if (!cmd) return;
-
-  if (!message.guild.me.permissions.has(["SEND_MESSAGES"])) return;
+  if (
+    !message.content.startsWith(prefix) ||
+    !message.guild ||
+    message.author.bot ||
+    !cmd
+  )
+    return;
 
   if (cmd.requirements.ownerOnly && !owners.includes(message.author.id))
     return message

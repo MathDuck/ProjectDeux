@@ -8,6 +8,7 @@ module.exports.run = client => {
     const event = require(`${filePath}/${eventFile}`);
     const eventName = eventFile.split(".").shift();
     client.on(eventName, event.bind(null, client));
+    delete require.cache[require.resolve(`${filePath}/${eventFile}`)];
   }
 
   console.log(`${eventFiles.length} évents chargé!`);
