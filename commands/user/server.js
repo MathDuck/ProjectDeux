@@ -35,6 +35,6 @@ module.exports.requirements = {
 };
 
 module.exports.limits = {
-  rateLimit: 2,
-  cooldown: 5 * 1000
+  rateLimit: 5,
+  cooldown: 30 * 1000
 };
