@@ -5,6 +5,6 @@ module.exports = {
     return moment(dateTime).format("DD-MM-YYYY - HH:mm");
   },
   getTime: function(dateTime) {
-    return moment(dateTime).format("HH:mm");
+    return moment(dateTime).format("HH:mm:ss");
   }
 };

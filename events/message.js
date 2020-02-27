@@ -1,11 +1,13 @@
 const { owners } = require("../config");
+const timeFormat = require("../functions/dateFormat");
 
 module.exports = async (client, message) => {
-  console.log(
-    `Message reçu: "${message.content}" de ${message.author.username}`
-  );
-
   if (!message.guild || message.author.bot) return;
+
+  const time = timeFormat.getTime(Date.now());
+  console.log(
+    `Message reçu: "${message.content}" de ${message.author.username} à ${time}`
+  );
 
   if (!client.prefix[message.guild.id]) {
     const data = await client.db
@@ -18,7 +20,7 @@ module.exports = async (client, message) => {
   }
 
   const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
-  prefix = message.content.match(prefixMention)
+  let prefix = message.content.match(prefixMention)
     ? message.content.match(prefixMention)[0]
     : client.prefix[message.guild.id];
 
@@ -77,7 +79,9 @@ module.exports = async (client, message) => {
       if (current >= cmd.limits.rateLimit) {
         if (message.deletable) message.delete();
         return message
-          .reply("évite de spammer ;)")
+          .reply(
+            `évite de spammer ;) (Cooldown: ${cmd.limits.cooldown / 1000}s)`
+          )
           .then(msg => msg.delete({ timeout: 3000 }));
       }
       client.limits.set(`${command}-${message.author.id}`, current + 1);

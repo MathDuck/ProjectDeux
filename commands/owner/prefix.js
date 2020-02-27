@@ -17,11 +17,11 @@ module.exports.run = async (client, message, args) => {
     .get(message.guild.id);
 
   if (!data) {
-    const result = await client.db
+    await client.db
       .prepare("INSERT INTO servers (guildid, prefix) VALUES (?, ?)")
       .run(message.guild.id, args.join(" "));
   } else {
-    const result = await client.db
+    await client.db
       .prepare("UPDATE servers SET prefix = ? WHERE guildid = ? LIMIT 1")
       .run(args.join(" "), message.guild.id);
   }

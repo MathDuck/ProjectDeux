@@ -4,13 +4,14 @@ const {
   where,
   botActivityStatus,
   botActivityType,
-  botStatus
+  botStatus,
+  mazoEnabled
 } = require("./config");
 const commandhandler = require("./handlers/commandHandler");
 const eventhandler = require("./handlers/EventHandler");
 require("dotenv").config();
 const SQLite = require("better-sqlite3");
-const db = new SQLite("./db.sqlite");
+const db = new SQLite("./db.sqlite", { verbose: console.log });
 
 const client = new Client({
   disableEveryone: true,
@@ -34,9 +35,11 @@ const load = async () => {
   await commandhandler.run(client);
   await eventhandler.run(client);
 
-  db.prepare(
-    "CREATE TABLE IF NOT EXISTS servers (guildid TEXT PRIMARY KEY, prefix TEXT, logChannelid TEXT)"
-  ).run();
+  await db
+    .prepare(
+      "CREATE TABLE IF NOT EXISTS servers (guildid TEXT PRIMARY KEY, prefix TEXT DEFAULT '!!', logChannelid TEXT, mazoEnabled INTEGER)"
+    )
+    .run();
 
   client.db = db;
 };
