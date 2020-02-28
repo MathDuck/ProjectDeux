@@ -1,56 +1,40 @@
-module.exports.run = async (client, message, args) => {
-  if (message.deletable) message.delete();
+const serversTableHandler = require("../../handlers/serversTableHandler");
 
-  if (!args[0])
-    return message
-      .reply(
-        `le préfixe actuel est \`${
-          client.prefix[message.guild.id]
-        }\`\nPour changer le préfixe, merci d'en spécifier un nouveau en tant qu'argument. (Usage: ${
-          client.prefix[message.guild.id]
-        }prefix <Nouveau préfixe>)`
-      )
-      .then(m => m.delete({ timeout: 10000 }));
+module.exports.run = async(client, message, args) => {
+    if (message.deletable) message.delete();
 
-  const data = await client.db
-    .prepare("SELECT * FROM servers WHERE guildid = ? LIMIT 1")
-    .get(message.guild.id);
+    if (!args[0])
+        return message
+            .reply(`le préfixe actuel est \`${client.prefix}\`\nPour changer le préfixe, merci d'en spécifier un nouveau en tant qu'argument. (Usage: ${client.prefix}prefix <Nouveau préfixe>)`)
+            .then(m => m.delete({ timeout: 10000 }));
 
-  if (!data) {
-    await client.db
-      .prepare("INSERT INTO servers (guildid, prefix) VALUES (?, ?)")
-      .run(message.guild.id, args.join(" "));
-  } else {
-    await client.db
-      .prepare("UPDATE servers SET prefix = ? WHERE guildid = ? LIMIT 1")
-      .run(args.join(" "), message.guild.id);
-  }
-
-  client.prefix[message.guild.id] = args.join(" ");
-  message.channel
-    .send(
-      `Le nouveau préfixe pour les commandes est désormais \`${args.join(
+    client.prefix = args.join(" ");
+    message.channel
+        .send(
+            `Le nouveau préfixe pour les commandes est désormais \`${args.join(
         " "
       )}\``
-    )
-    .then(msg => msg.delete({ timeout: 4000 }));
+        )
+        .then(msg => msg.delete({ timeout: 4000 }));
+
+    await serversTableHandler.updatePrefixQuery(client).run(args.join(" "), message.guild.id);
 };
 
 module.exports.help = {
-  name: "prefix",
-  aliases: ["setprefix"],
-  description: "Change le préfixe des commandes.",
-  usage: "<préfixe>",
-  category: "Gestion"
+    name: "prefix",
+    aliases: ["setprefix"],
+    description: "Change le préfixe des commandes.",
+    usage: "<préfixe>",
+    category: "Gestion"
 };
 
 module.exports.requirements = {
-  userPerms: ["ADMINISTRATOR"],
-  clientPerms: [],
-  ownerOnly: false
+    userPerms: ["ADMINISTRATOR"],
+    clientPerms: [],
+    ownerOnly: false
 };
 
 module.exports.limits = {
-  rateLimit: 1,
-  cooldown: 30 * 1000
+    rateLimit: 1,
+    cooldown: 30 * 1000
 };

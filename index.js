@@ -1,11 +1,10 @@
 const { Client, Collection } = require("discord.js");
 const {
-  prefix,
-  where,
-  botActivityStatus,
-  botActivityType,
-  botStatus,
-  mazoEnabled
+    prefix,
+    where,
+    botActivityStatus,
+    botActivityType,
+    botStatus
 } = require("./config");
 const commandhandler = require("./handlers/commandHandler");
 const eventhandler = require("./handlers/EventHandler");
@@ -14,34 +13,23 @@ const SQLite = require("better-sqlite3");
 const db = new SQLite("./db.sqlite", { verbose: console.log });
 
 const client = new Client({
-  disableEveryone: true,
-  presence: {
-    activity: { name: botActivityStatus, type: botActivityType },
-    status: botStatus
-  }
+    disableEveryone: true,
+    presence: {
+        activity: { name: botActivityStatus, type: botActivityType },
+        status: botStatus
+    }
 });
 
-//Collections
 client.commands = new Collection();
 client.aliases = new Collection();
 client.limits = new Map();
 
-//Config
-client.prefix = new Object();
-client.prefix["default"] = prefix;
-client.where = where;
-
-const load = async () => {
-  await commandhandler.run(client);
-  await eventhandler.run(client);
-
-  await db
-    .prepare(
-      "CREATE TABLE IF NOT EXISTS servers (guildid TEXT PRIMARY KEY, prefix TEXT DEFAULT '!!', logChannelid TEXT, mazoEnabled INTEGER)"
-    )
-    .run();
-
-  client.db = db;
+const load = async() => {
+    await commandhandler.run(client);
+    await eventhandler.run(client);
+    client.prefix = prefix;
+    client.where = where;
+    client.db = db;
 };
 
 load();
