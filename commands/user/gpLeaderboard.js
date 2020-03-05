@@ -2,6 +2,8 @@ const { MessageEmbed } = require("discord.js");
 const serverQueryFactory = require("../../factories/serverQueryFactory");
 const userQueryFactory = require("../../factories/userQueryFactory");
 
+//https://chart.googleapis.com/chart?chs=750x300&chd=t:60,40,14,26&chl=Hello|World&cht=bvs&chxt=y
+
 module.exports.run = async (client, message, args) => {
   if (message.deletable) message.delete();
 
@@ -9,27 +11,35 @@ module.exports.run = async (client, message, args) => {
     .checkDataQuery(client)
     .get(message.guild.id);
 
-  if (globalServerData.xpSystem === 1) {
+  if (globalServerData.gameSystem === 1) {
     const sortedUserData = await userQueryFactory
-      .getSortedUsersByXPQuery(client, message.guild.id)
+      .getSortedUsersByGPQuery(client, message.guild.id)
       .all(message.guild.id, 20);
+
+    let chd = [];
+    let chl = [];
 
     let ranking = [];
     let i = 1;
 
     for (const user of sortedUserData) {
-      ranking.push(
-        `${i}) **${user.username}** - ${user.xpPoints} XP (Level: ${user.level})\n`
-      );
+      chd.push(`${user.gamePoints},`);
+      chl.push(`${user.username.split("#")[0]}(${user.gamePoints})|`);
+
+      ranking.push(`${i}) **${user.username}** - ${user.gamePoints} Points\n`);
       i++;
     }
+
+    const link = `https://chart.googleapis.com/chart?chs=750x300&chds=a&cht=p&chxt=y&chd=t:${chd
+      .join("")
+      .replace(/,\s*$/, "")}&chl=${chl.join("").replace(/|\s*$/, "")}&chof=png`;
 
     const rankingEmbed = new MessageEmbed()
       .setAuthor(
         message.guild.me.displayName,
         message.guild.me.user.avatarURL()
       )
-      .setTitle("Classement XP")
+      .setTitle("Classement des points")
       .setDescription(
         `Hey **${
           message.author.tag
@@ -40,17 +50,17 @@ module.exports.run = async (client, message, args) => {
       .setColor("GRAY")
       .setTimestamp();
     message.channel.send({ embed: rankingEmbed });
+    //message.channel.send(link);
   } else {
-    message
-      .reply("le système de gain d'expérience est désactivé.")
-      .then(msg => msg.delete({ timeout: 3000 }));
+    message.reply("le système des points de jeux est désactivé.");
   }
 };
 
 module.exports.help = {
-  name: "xplead",
-  aliases: ["xpleaderboard"],
-  description: "Renvoie un classement des leaders XP du serveur.",
+  name: "lead",
+  aliases: ["leaderboard"],
+  description:
+    "Renvoie un classement des leaders de points de jeux du serveur.",
   usage: "<>",
   category: "Utilisateur"
 };

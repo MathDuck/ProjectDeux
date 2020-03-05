@@ -1,7 +1,12 @@
-const { prefix } = require("../../config");
+const serverQueryFactory = require("../../factories/serverQueryFactory");
 
 module.exports.run = async (client, message, args) => {
   if (message.deletable) message.delete();
+
+  const checkServerData = await serverQueryFactory
+    .checkDataQuery(client)
+    .get(message.guild.id);
+
   const longest = client.commands.reduce(
     (long, str) => Math.max(long, str.length),
     0
@@ -32,7 +37,7 @@ module.exports.run = async (client, message, args) => {
     if (c.help.aliases && Array.isArray(c.help.aliases)) {
       aliases = `[alias: ${c.help.aliases}]`;
     }
-    output += `${prefix}${c.help.name}${usage}${" ".repeat(
+    output += `${checkServerData.prefix}${c.help.name}${usage}${" ".repeat(
       longest - c.help.name.length
     )} :: ${c.help.description} ${aliases}\n`;
   });

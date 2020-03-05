@@ -2,9 +2,7 @@ const { stripIndents } = require("common-tags");
 const { MessageEmbed } = require("discord.js");
 
 module.exports.run = (client, message, args) => {
-  let member =
-    message.guild.members.cache.get(args[0]) ||
-    message.mentions.members.first();
+  let member = message.mentions.members.first();
 
   if (!args[0]) member = message.member;
 
@@ -43,8 +41,8 @@ module.exports.run = (client, message, args) => {
     .join("-");
 
   const embed = new MessageEmbed()
-    .setFooter(member.displayName, member.user.displayAvatarURL)
-    .setThumbnail(member.user.displayAvatarURL)
+    .setAuthor(message.guild.me.displayName, message.guild.me.user.avatarURL())
+    .setThumbnail(member.user.displayAvatarURL())
     .setColor(
       member.displayHexColor === "#000000" ? "#ffffff" : member.displayHexColor
     )
@@ -68,10 +66,10 @@ module.exports.run = (client, message, args) => {
 
     .setTimestamp();
 
-  if (member.user.presence.game)
+  if (member.user.presence.activity)
     embed.addField(
       "Activité actuelle:",
-      stripIndents`> *${member.user.presence.game.name}*`
+      stripIndents`> *${member.user.presence.activity.name}*`
     );
 
   message.channel.send(embed);

@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const date = require("../../functions/dateFormat");
+const dateFormat = require("../../functions/dateFormat");
 
 module.exports.run = (client, message, args) => {
   if (message.deletable) message.delete();
@@ -9,7 +9,7 @@ module.exports.run = (client, message, args) => {
     .setAuthor(message.guild.name, message.guild.iconURL())
     .addField("Serveur ID", message.guild.id, true)
     .addField("Propriétaire", message.guild.owner, true)
-    .addField("Création", date.getDate(message.guild.createdAt), true)
+    .addField("Création", dateFormat.getDate(message.guild.createdAt), true)
     .addField("Membres", message.guild.memberCount, true)
     .addField("Rôles", message.guild.roles.cache.size, true)
     .addField("Salons", message.guild.channels.cache.size, true)

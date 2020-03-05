@@ -40,7 +40,7 @@ module.exports.help = {
 module.exports.requirements = {
   userPerms: ["ADMINISTRATOR"],
   clientPerms: [],
-  ownerOnly: false
+  ownerOnly: true
 };
 
 module.exports.limits = {
