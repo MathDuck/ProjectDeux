@@ -79,7 +79,7 @@ module.exports.help = {
   name: "whois",
   aliases: ["info"],
   description:
-    "Donne des infos sur un utilisateur ou soi-même si aucun argument n'est donné.",
+    "Donne des infos sur un utilisateur ou soi-même si aucun argument.",
   usage: "<>/<pseudo>",
   category: "Utilisateur"
 };

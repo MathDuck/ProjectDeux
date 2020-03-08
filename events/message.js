@@ -10,6 +10,7 @@ module.exports = async (client, message) => {
   const dataExists = await serverQueryFactory
     .checkDataQuery(client)
     .get(message.guild.id);
+
   if (!dataExists)
     await serverQueryFactory.buildDataQuery(client).run(message.guild.id);
 
@@ -19,7 +20,7 @@ module.exports = async (client, message) => {
   console.log(
     `Message reçu: "${message.content}" de ${message.author.username} à ${time}`
   );
-  
+
   const data = await serverQueryFactory
     .checkDataQuery(client)
     .get(message.guild.id);

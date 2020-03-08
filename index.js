@@ -8,8 +8,8 @@ const db = new SQLite("./db.sqlite", { verbose: console.log });
 const client = new Client({
   disableEveryone: true,
   presence: {
-    activity: { name: "botActivityStatus", type: "botActivityType" },
-    status: "botStatus"
+    activity: { name: "botActivityStatus", type: "WATCHING" },
+    status: "online"
   }
 });
 
