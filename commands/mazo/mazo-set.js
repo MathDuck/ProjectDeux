@@ -12,7 +12,7 @@ module.exports.run = async (client, message, args) => {
       .reply("seul un administrateur peut configurer le mazo.")
       .then(msg => msg.delete({ timeout: 4000 }));
 
-  if (serverData.mazoConfigured === 1)
+  if (serverData.mazo_configured === 1)
     return message
       .reply("le mazo est déjà configuré sur le serveur.")
       .then(msg => msg.delete({ timeout: 4000 }));
@@ -20,8 +20,6 @@ module.exports.run = async (client, message, args) => {
     await serverQueryFactory
       .updateMazoSystemQuery(client)
       .run(1, 1, message.guild.id);
-
-  await mazoQueryFactory.createMazoTableQuery(client, message.guild.id).run();
 
   return message
     .reply("le mazo est dorénavant configuré et activé.")

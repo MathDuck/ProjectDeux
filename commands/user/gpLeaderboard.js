@@ -11,9 +11,9 @@ module.exports.run = async (client, message, args) => {
     .checkDataQuery(client)
     .get(message.guild.id);
 
-  if (globalServerData.gameSystem === 1) {
+  if (globalServerData.game_system === 1) {
     const sortedUserData = await userQueryFactory
-      .getSortedUsersByGPQuery(client, message.guild.id)
+      .getSortedUsersByGPQuery(client)
       .all(message.guild.id, 20);
 
     let chd = [];
@@ -23,10 +23,10 @@ module.exports.run = async (client, message, args) => {
     let i = 1;
 
     for (const user of sortedUserData) {
-      chd.push(`${user.gamePoints},`);
-      chl.push(`${user.username.split("#")[0]}(${user.gamePoints})|`);
+      chd.push(`${user.game_points},`);
+      chl.push(`${user.username.split("#")[0]}(${user.game_points})|`);
 
-      ranking.push(`${i}) **${user.username}** - ${user.gamePoints} Points\n`);
+      ranking.push(`${i}) **${user.username}** - ${user.game_points} Points\n`);
       i++;
     }
 

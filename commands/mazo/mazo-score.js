@@ -4,7 +4,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports.run = async (client, message, args) => {
   if (message.deletable) message.delete();
   const userMazoData = await mazoQueryFactory
-    .selectMazoUserQuery(client, message.guild.id)
+    .selectMazoUserQuery(client)
     .get(message.author.id);
 
   if (!userMazoData)
@@ -19,8 +19,8 @@ module.exports.run = async (client, message, args) => {
               )*/
     .setTitle("Mes stats Mazo")
     .setDescription(`Hey **${message.author.tag}**, voici tes stats!`)
-    .addField("Score Actuel", userMazoData.currentScore, true)
-    .addField("Record", userMazoData.topScore, true)
+    .addField("Score Actuel", userMazoData.current_score, true)
+    .addField("Record", userMazoData.top_score, true)
     .setColor("BLUE")
     .setTimestamp();
 

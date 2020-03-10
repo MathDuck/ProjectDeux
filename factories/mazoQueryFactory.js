@@ -1,47 +1,41 @@
 module.exports = {
-  createMazoTableQuery: function(client, guildId) {
+  selectMazoUserQuery: function(client) {
     return client.db.prepare(
-      `CREATE TABLE IF NOT EXISTS mazo_${guildId} (guildId TEXT, userId TEXT, username TEXT, currentScore INTEGER DEFAULT 0, topScore INTEGER DEFAULT 0)`
+      `SELECT * FROM mazo_data WHERE user_id = ? LIMIT 1`
     );
   },
 
-  selectMazoUserQuery: function(client, guildId) {
+  registerMazoUserQuery: function(client) {
     return client.db.prepare(
-      `SELECT * FROM mazo_${guildId} WHERE userId = ? LIMIT 1`
+      `INSERT INTO mazo_data (guild_id, user_id, username) VALUES (?, ?, ?)`
     );
   },
 
-  registerMazoUserQuery: function(client, guildId) {
+  updateMazoCurrentScoreUserQuery: function(client) {
     return client.db.prepare(
-      `INSERT INTO mazo_${guildId} (guildId, userId, username) VALUES (?, ?, ?)`
+      `UPDATE mazo_data SET current_score = ? WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  updateMazoCurrentScoreUserQuery: function(client, guildId) {
+  updateMazoTopScoreUserQuery: function(client) {
     return client.db.prepare(
-      `UPDATE mazo_${guildId} SET currentScore = ? WHERE userId = ? AND guildId = ? LIMIT 1`
+      `UPDATE mazo_data SET top_score = ? WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  updateMazoTopScoreUserQuery: function(client, guildId) {
+  getMazoDataQuery: function(client) {
     return client.db.prepare(
-      `UPDATE mazo_${guildId} SET topScore = ? WHERE userId = ? AND guildId = ? LIMIT 1`
+      `SELECT * FROM mazo_data WHERE guild_id = ? ORDER BY top_score DESC LIMIT ?`
     );
   },
 
-  getMazoDataQuery: function(client, guildId) {
-    return client.db.prepare(
-      `SELECT * FROM mazo_${guildId} WHERE guildId = ? ORDER BY topScore DESC LIMIT ?`
-    );
+  getAllMazoUsersQuery: function(client) {
+    return client.db.prepare(`SELECT * FROM mazo_data WHERE guild_id = ?`);
   },
 
-  getAllMazoUsersQuery: function(client, guildId) {
-    return client.db.prepare(`SELECT * FROM mazo_${guildId} WHERE guildId = ?`);
-  },
-
-  deleteMazoUserQuery: function(client, guildId) {
+  deleteMazoUserQuery: function(client) {
     return client.db.prepare(
-      `DELETE FROM mazo_${guildId} WHERE guildId = ? AND userId = ? LIMIT 1`
+      `DELETE FROM mazo_data WHERE guild_id = ? AND user_id = ? LIMIT 1`
     );
   }
 };

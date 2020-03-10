@@ -6,7 +6,6 @@ const userQueryFactory = require("../factories/userQueryFactory");
 module.exports = async (client, message) => {
   if (!message.guild) return;
 
-  await serverQueryFactory.createServerTableQuery(client).run();
   const dataExists = await serverQueryFactory
     .checkDataQuery(client)
     .get(message.guild.id);
@@ -32,26 +31,22 @@ module.exports = async (client, message) => {
     : finalPrefix;
 
   if (!message.content.startsWith(prefix)) {
-    if (data.xpSystem === 1) {
-      await userQueryFactory
-        .createUserTableQuery(client, message.guild.id)
-        .run();
-
+    if (data.xp_system === 1) {
       let userData = await userQueryFactory
-        .selectUserQuery(client, message.guild.id)
-        .get(message.author.id);
+        .selectUserQuery(client)
+        .get(message.author.id, message.guild.id);
 
       if (!userData) {
         await userQueryFactory
-          .registerUserQuery(client, message.guild.id)
+          .registerUserQuery(client)
           .run(message.guild.id, message.author.id, message.author.tag);
 
         userData = await userQueryFactory
-          .selectUserQuery(client, message.guild.id)
-          .get(message.author.id);
+          .selectUserQuery(client)
+          .get(message.author.id, message.guild.id);
       }
 
-      let userXPPoints = userData.xpPoints;
+      let userXPPoints = userData.xp_points;
       userXPPoints = userXPPoints + 1;
 
       let userLevel = userData.level;
@@ -65,12 +60,12 @@ module.exports = async (client, message) => {
           .then(msg => msg.delete({ timeout: 30000 }));
         userLevel = targetLevel;
         await userQueryFactory
-          .addLevelToUserQuery(client, message.guild.id)
-          .run(userLevel, message.author.id);
+          .addLevelToUserQuery(client)
+          .run(userLevel, message.author.id, message.guild.id);
       }
       await userQueryFactory
         .addPointToUserQuery(client, message.guild.id)
-        .run(userXPPoints, message.author.id);
+        .run(userXPPoints, message.author.id, message.guild.id);
     }
     return;
   }
@@ -141,7 +136,12 @@ module.exports = async (client, message) => {
     }, cmd.limits.cooldown);
   }
 
-  if (cmd) cmd.run(client, message, args);
+  if (cmd) {
+    cmd.run(client, message, args);
+    serverQueryFactory
+      .increaseCommandLaunchedQuery(client)
+      .run(message.guild.id);
+  }
 };
 
 const missingPerms = (member, perms) => {

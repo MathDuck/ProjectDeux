@@ -8,7 +8,7 @@ module.exports.run = async (client, message, args) => {
     .get(message.guild.id);
 
   let xpSystemStatus;
-  if (serverData.xpSystem === 1) xpSystemStatus = 0;
+  if (serverData.xp_system === 1) xpSystemStatus = 0;
   else xpSystemStatus = 1;
 
   message
@@ -29,7 +29,7 @@ module.exports.help = {
   aliases: ["xps"],
   description: "Active/Désactive le système d'expérience par message.",
   usage: "<>",
-  category: "Gestion"
+  category: "Système Expérience"
 };
 
 module.exports.requirements = {

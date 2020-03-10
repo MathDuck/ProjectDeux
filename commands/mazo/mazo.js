@@ -10,7 +10,7 @@ module.exports.run = async (client, message, args) => {
   let mazoEnabled = 0;
   let mazoConfigured = 0;
 
-  if (!serverData || !serverData.mazoConfigured) {
+  if (!serverData || !serverData.mazo_configured) {
     if (message.deletable) message.delete();
     mazoConfigured = 0;
     return message
@@ -19,10 +19,10 @@ module.exports.run = async (client, message, args) => {
       )
       .then(msg => msg.delete({ timeout: 5000 }));
   } else {
-    if (serverData.mazoConfigured === 1) mazoConfigured = 1;
+    if (serverData.mazo_configured === 1) mazoConfigured = 1;
   }
 
-  if (!serverData || !serverData.mazoEnabled) {
+  if (!serverData || !serverData.mazo_enabled) {
     if (message.deletable) message.delete();
     mazoEnabled = 0;
     return message
@@ -31,7 +31,7 @@ module.exports.run = async (client, message, args) => {
       )
       .then(msg => msg.delete({ timeout: 5000 }));
   } else {
-    if (serverData.mazoEnabled === 1) mazoEnabled = 1;
+    if (serverData.mazo_enabled === 1) mazoEnabled = 1;
     else mazoEnabled = 0;
   }
 
@@ -40,22 +40,22 @@ module.exports.run = async (client, message, args) => {
       if (message.deletable) message.delete();
 
       let userMazoData = mazoQueryFactory
-        .selectMazoUserQuery(client, message.guild.id)
+        .selectMazoUserQuery(client)
         .get(message.author.id);
 
       if (!userMazoData) {
         await mazoQueryFactory
-          .registerMazoUserQuery(client, message.guild.id)
+          .registerMazoUserQuery(client)
           .run(message.guild.id, message.author.id, message.author.tag);
 
         userMazoData = await mazoQueryFactory
-          .selectMazoUserQuery(client, message.guild.id)
+          .selectMazoUserQuery(client)
           .get(message.author.id);
       }
 
       const username = message.author.tag;
-      let userCurrentScore = userMazoData.currentScore;
-      let userTopScore = userMazoData.topScore;
+      let userCurrentScore = userMazoData.current_score;
+      let userTopScore = userMazoData.top_score;
 
       const MazoChance = Math.random();
 
@@ -78,7 +78,7 @@ module.exports.run = async (client, message, args) => {
         message.channel.send({ embed: embed });
 
         mazoQueryFactory
-          .updateMazoCurrentScoreUserQuery(client, message.guild.id)
+          .updateMazoCurrentScoreUserQuery(client)
           .run(userCurrentScore, message.author.id, message.guild.id);
 
         if (userCurrentScore > userTopScore) {
@@ -100,7 +100,7 @@ module.exports.run = async (client, message, args) => {
           message.channel.send({ embed: embed });
 
           mazoQueryFactory
-            .updateMazoTopScoreUserQuery(client, message.guild.id)
+            .updateMazoTopScoreUserQuery(client)
             .run(userTopScore, message.author.id, message.guild.id);
         }
       } else {
@@ -123,7 +123,7 @@ module.exports.run = async (client, message, args) => {
         message.channel.send({ embed: embed });
 
         mazoQueryFactory
-          .updateMazoCurrentScoreUserQuery(client, message.guild.id)
+          .updateMazoCurrentScoreUserQuery(client)
           .run(0, message.author.id, message.guild.id);
       }
     }

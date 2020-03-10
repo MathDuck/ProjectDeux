@@ -2,4 +2,4 @@ package-lock.json
 node_modules/
 .env
 idées-bot.txt
-db.sqlite*
+data/

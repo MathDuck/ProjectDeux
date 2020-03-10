@@ -11,7 +11,7 @@ module.exports.run = async (client, message, args) => {
 
   if (globalServerData.xpSystem === 1) {
     const sortedUserData = await userQueryFactory
-      .getSortedUsersByXPQuery(client, message.guild.id)
+      .getSortedUsersByXPQuery(client)
       .all(message.guild.id, 20);
 
     let ranking = [];
@@ -19,7 +19,7 @@ module.exports.run = async (client, message, args) => {
 
     for (const user of sortedUserData) {
       ranking.push(
-        `${i}) **${user.username}** - ${user.xpPoints} XP (Level: ${user.level})\n`
+        `${i}) **${user.username}** - ${user.xp_points} XP (Level: ${user.level})\n`
       );
       i++;
     }

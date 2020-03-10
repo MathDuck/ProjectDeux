@@ -21,34 +21,34 @@ module.exports.run = async (client, message, args) => {
     .get(message.guild.id);
 
   const userMazoData = await mazoQueryFactory
-    .selectMazoUserQuery(client, message.guild.id)
+    .selectMazoUserQuery(client)
     .get(member.id);
 
   if (!userMazoData) return;
 
   let mazoString =
-    globalServerData.mazoEnabled === 1
-      ? stripIndents`> **Score:** ${userMazoData.currentScore}
-      > **Record:** ${userMazoData.topScore}`
+    globalServerData.mazo_enabled === 1
+      ? stripIndents`> **Score:** ${userMazoData.current_score}
+      > **Record:** ${userMazoData.top_score}`
       : "Désactivé";
 
   let userData = await userQueryFactory
-    .selectUserQuery(client, message.guild.id)
-    .get(member.id);
+    .selectUserQuery(client)
+    .get(member.id, message.guild.id);
 
   let xpString =
-    globalServerData.xpSystem === 1
-      ? stripIndents`> **XP:** ${userData.xpPoints}
+    globalServerData.xp_system === 1
+      ? stripIndents`> **XP:** ${userData.xp_points}
      > **Level:** ${userData.level}`
       : "Désactivé";
 
   let gpString =
-    globalServerData.gameSystem === 1
-      ? stripIndents`> **Points:** ${userData.gamePoints}`
+    globalServerData.game_system === 1
+      ? stripIndents`> **Points:** ${userData.game_points}`
       : "Désactivé";
 
   const embed = new MessageEmbed()
-    .setAuthor(`Stats de ` + member.user.tag)
+    .setAuthor(`Stats de ${member.user.tag} sur ${message.guild.name}`)
     .setThumbnail(member.user.displayAvatarURL())
     .setColor(
       member.displayHexColor === "#000000" ? "#ffffff" : member.displayHexColor

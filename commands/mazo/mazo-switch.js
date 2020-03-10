@@ -12,12 +12,12 @@ module.exports.run = async (client, message, args) => {
       .then(msg => msg.delete({ timeout: 4000 }));
 
   let mazoStatus;
-  if (serverData.mazoEnabled === 1) mazoStatus = 0;
+  if (serverData.mazo_enabled === 1) mazoStatus = 0;
   else mazoStatus = 1;
 
   await serverQueryFactory
     .updateMazoSystemQuery(client)
-    .run(mazoStatus, serverData.mazoConfigured, message.guild.id);
+    .run(mazoStatus, serverData.mazo_configured, message.guild.id);
   mazoEnabled = mazoStatus;
 
   return message

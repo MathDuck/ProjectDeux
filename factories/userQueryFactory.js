@@ -1,75 +1,65 @@
 module.exports = {
-  getXPSystemEnabled: function(client) {
+  createUserTableQuery: function(client) {
     return client.db.prepare(
-      "SELECT xpSystem FROM servers WHERE guildId = ? LIMIT 1"
-    );
-  },
-  getGameSystemEnabled: function(client) {
-    return client.db.prepare(
-      "SELECT gameSystem FROM servers WHERE guildId = ? LIMIT 1"
-    );
-  },
-  createUserTableQuery: function(client, guildId) {
-    return client.db.prepare(
-      `CREATE TABLE IF NOT EXISTS users_${guildId} (guildId TEXT, userId TEXT, username TEXT, xpPoints INTEGER DEFAULT 0, level INTEGER DEFAULT 0, gamePoints INTEGER DEFAULT 0)`
+      `CREATE TABLE IF NOT EXISTS user_data (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id TEXT, user_id TEXT, username TEXT, xp_points INTEGER DEFAULT 0, level INTEGER DEFAULT 0, game_points INTEGER DEFAULT 0)`
     );
   },
 
-  selectUserQuery: function(client, guildId) {
+  selectUserQuery: function(client) {
     return client.db.prepare(
-      `SELECT * FROM users_${guildId} WHERE userId = ? LIMIT 1`
+      `SELECT * FROM user_data WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  registerUserQuery: function(client, guildId) {
+  registerUserQuery: function(client) {
     return client.db.prepare(
-      `INSERT INTO users_${guildId} (guildId, userId, username) VALUES (?, ?, ?)`
+      `INSERT INTO user_data (guild_id, user_id, username) VALUES (?, ?, ?)`
     );
   },
 
-  addPointToUserQuery: function(client, guildId) {
+  addPointToUserQuery: function(client) {
     return client.db.prepare(
-      `UPDATE users_${guildId} SET xpPoints = ? WHERE userId = ? LIMIT 1`
+      `UPDATE user_data SET xp_points = ? WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  changeGamePointUserQuery: function(client, guildId) {
+  changeGamePointUserQuery: function(client) {
     return client.db.prepare(
-      `UPDATE users_${guildId} SET gamePoints = ? WHERE userId = ? LIMIT 1`
+      `UPDATE user_data SET game_points = ? WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  addLevelToUserQuery: function(client, guildId) {
+  addLevelToUserQuery: function(client) {
     return client.db.prepare(
-      `UPDATE users_${guildId} SET level = ? WHERE userId = ? LIMIT 1`
+      `UPDATE user_data SET level = ? WHERE user_id = ? AND guild_id = ? LIMIT 1`
     );
   },
 
-  getUsersQuery: function(client, guildId) {
+  getUsersQuery: function(client) {
+    return client.db.prepare(`SELECT * FROM user_data WHERE guild_id = ?`);
+  },
+
+  getSortedUsersByXPQuery: function(client) {
     return client.db.prepare(
-      `SELECT * FROM users_${guildId} WHERE guildId = ?`
+      `SELECT * FROM user_data WHERE guild_id = ? ORDER BY xp_points DESC LIMIT ?`
     );
   },
 
-  getSortedUsersByXPQuery: function(client, guildId) {
+  getSortedUsersByGPQuery: function(client) {
     return client.db.prepare(
-      `SELECT * FROM users_${guildId} WHERE guildId = ? ORDER BY xpPoints DESC LIMIT ?`
+      `SELECT * FROM user_data WHERE guild_id = ? ORDER BY game_points DESC LIMIT ?`
     );
   },
 
-  getSortedUsersByGPQuery: function(client, guildId) {
+  deleteUserQuery: function(client) {
     return client.db.prepare(
-      `SELECT * FROM users_${guildId} WHERE guildId = ? ORDER BY gamePoints DESC LIMIT ?`
+      `DELETE FROM user_data WHERE guild_id = ? AND user_id = ? LIMIT 1`
     );
   },
 
-  deleteUserQuery: function(client, guildId) {
+  purgeUsersGamePointsQuery: function(client) {
     return client.db.prepare(
-      `DELETE FROM users_${guildId} WHERE guildId = ? AND userId = ? LIMIT 1`
+      `UPDATE user_data SET game_points = 0 WHERE guild_id = ?`
     );
-  },
-
-  purgeUsersGamePointsQuery: function(client, guildId) {
-    return client.db.prepare(`UPDATE users_${guildId} SET gamePoints = 0`);
   }
 };

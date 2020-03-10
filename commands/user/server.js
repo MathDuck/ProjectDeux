@@ -1,8 +1,13 @@
 const { MessageEmbed } = require("discord.js");
 const dateFormat = require("../../functions/dateFormat");
+const serverQueryFactory = require("../../factories/serverQueryFactory");
 
-module.exports.run = (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   if (message.deletable) message.delete();
+
+  let serverData = await serverQueryFactory
+    .checkDataQuery(client)
+    .get(message.guild.id);
 
   message.reply(`voici les infos du serveur:`);
   const embed = new MessageEmbed()
@@ -14,6 +19,7 @@ module.exports.run = (client, message, args) => {
     .addField("Rôles", message.guild.roles.cache.size, true)
     .addField("Salons", message.guild.channels.cache.size, true)
     .addField("Emojis", message.guild.emojis.cache.size, true)
+    .addField("Commandes lancées", serverData.commandsLaunched, true)
     .setColor("RANDOM")
     .setThumbnail(message.guild.iconURL());
 

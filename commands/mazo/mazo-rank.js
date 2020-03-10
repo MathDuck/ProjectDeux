@@ -4,7 +4,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports.run = async (client, message, args) => {
   if (message.deletable) message.delete();
   const globalMazoData = mazoQueryFactory
-    .getMazoDataQuery(client, message.guild.id)
+    .getMazoDataQuery(client)
     .all(message.guild.id, 12);
 
   if (!globalMazoData)
@@ -16,7 +16,9 @@ module.exports.run = async (client, message, args) => {
   let i = 1;
 
   for (const cat of globalMazoData) {
-    ranking.push(`${i}) **${cat.username}** - ${cat.topScore} Point(s) Mazo\n`);
+    ranking.push(
+      `${i}) **${cat.username}** - ${cat.top_score} Point(s) Mazo\n`
+    );
     i++;
   }
 
