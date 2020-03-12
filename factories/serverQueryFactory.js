@@ -49,5 +49,17 @@ module.exports = {
     return client.db.prepare(
       "UPDATE servers SET commands_launched = commands_launched + 1 WHERE guild_id = ? LIMIT 1"
     );
+  },
+
+  updateSupportMessageHeaderId: function(client) {
+    return client.db.prepare(
+      "UPDATE servers SET support_header_message_id = ? WHERE guild_id = ? LIMIT 1"
+    );
+  },
+
+  updateTicketsCategoryId: function(client) {
+    return client.db.prepare(
+      "UPDATE servers SET tickets_category_channel_id = ? WHERE guild_id = ? LIMIT 1"
+    );
   }
 };
