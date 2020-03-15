@@ -15,6 +15,11 @@ module.exports = {
         `CREATE TABLE IF NOT EXISTS mazo_data (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id TEXT, user_id TEXT, username TEXT, current_score INTEGER DEFAULT 0, top_score INTEGER DEFAULT 0)`
       )
       .run();
+    client.db
+      .prepare(
+        `CREATE TABLE IF NOT EXISTS user_tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, guild_id TEXT, channel_id TEXT, user_id TEXT, username TEXT, resolved INTEGER DEFAULT 0, archived INTEGER DEFAULT 0, ticket_header_message_id TEXT, timestamp TEXT)`
+      )
+      .run();
 
     console.log(`Tables créées (si non existantes)...`);
   }

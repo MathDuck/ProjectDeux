@@ -28,5 +28,8 @@ module.exports = {
   },
   pad: function(s) {
     return (s < 10 ? "0" : "") + s;
+  },
+  leadPad: function(s) {
+    return (s < 10 ? "000" : "") + s;
   }
 };
