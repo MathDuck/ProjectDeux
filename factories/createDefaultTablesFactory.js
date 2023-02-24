@@ -2,7 +2,7 @@ module.exports = {
   createDefaultTables: function(client) {
     client.db
       .prepare(
-        `CREATE TABLE IF NOT EXISTS servers (guild_id TEXT PRIMARY KEY, prefix TEXT DEFAULT '!!', log_channel_id TEXT, mazo_configured INTEGER DEFAULT 0, mazo_enabled INTEGER DEFAULT 0, xp_system INTEGER DEFAULT 1, game_system INTEGER DEFAULT 0, commands_launched INTEGER DEFAULT 0, support_header_message_id TEXT, tickets_category_channel_id TEXT)`
+        `CREATE TABLE IF NOT EXISTS servers (guild_id TEXT PRIMARY KEY, prefix TEXT DEFAULT '!!', log_channel_id TEXT, mazo_configured INTEGER DEFAULT 0, mazo_enabled INTEGER DEFAULT 0, xp_system INTEGER DEFAULT 1, game_system INTEGER DEFAULT 0, commands_launched INTEGER DEFAULT 0, support_system INTEGER DEFAULT 0, support_header_message_id TEXT, tickets_category_channel_id TEXT)`
       )
       .run();
     client.db

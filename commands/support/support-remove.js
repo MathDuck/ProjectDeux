@@ -20,9 +20,9 @@ module.exports.run = async (client, message, args) => {
   embed.setDescription(
     `Le système de support est maintenant désactivé.\n
     - Vous pouvez maintenant supprimer ce salon, ou tous les messages de ce salon.
-    - Vous pouvez recréer un nouveau salon de support avec la commande ${serverData.prefix}s-set.
+    - Vous pouvez recréer un nouveau salon de support avec la commande \`${serverData.prefix}s-set\`.
     - Le tag [ARCHIVES] a été ajouté à la catégorie \`tickets\` (si elle existe encore).\n
-    Ce message se supprimera automatiquement dans 15 secondes.`
+    Ce message se supprimera automatiquement dans 20 secondes.`
   );
   embed.setColor("RED");
 
@@ -46,9 +46,17 @@ module.exports.run = async (client, message, args) => {
     .updateSupportMessageHeaderId(client)
     .run(null, message.guild.id);
 
-  await message.channel
+  message.channel
     .send({ embed: embed })
-    .then(m => m.delete({ timeout: 15000 }));
+    .then(m => m.delete({ timeout: 20000 }));
+
+  if (serverData.support_system === 1) {
+    return message
+      .reply(
+        `Pensez à désactiver le support ticket avec la commande \`${serverData.prefix}s-switch\`.`
+      )
+      .then(msg => msg.delete({ timeout: 3000 }));
+  }
 };
 
 module.exports.help = {

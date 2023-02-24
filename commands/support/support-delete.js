@@ -21,11 +21,11 @@ module.exports.run = async (client, message, args) => {
     .send({ embed: deleteEmbed })
     .then(msg => msg.delete({ timeout: 5000 }));
 
-  await message.channel.delete();
-
   await ticketQueryFactory
     .deleteTicketQuery(client)
     .run(message.guild.id, message.channel.id, 1);
+
+  await message.channel.delete();
 };
 
 module.exports.help = {

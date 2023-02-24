@@ -15,7 +15,7 @@ module.exports.run = async (client, message, args) => {
     - Toutes les personnes qui ajouteront une réaction sur l'émoji 🎫 ouvriront un nouveau ticket.
     - Vous pouvez désactiver le support en faisant la commande ${serverData.prefix}s-remove.
     - Une catégorie \`tickets\` (si elle n'existe pas) a été créée automatiquement sur la gauche. Vous pouvez la déplacer où bon vous semble.\n
-    Ce message se supprimera automatiquement dans 15 secondes.`
+    Ce message se supprimera automatiquement dans 20 secondes.`
   );
   firstEmbed.setColor("GREEN");
 
@@ -47,7 +47,7 @@ module.exports.run = async (client, message, args) => {
 
   message.channel
     .send({ embed: firstEmbed })
-    .then(m => m.delete({ timeout: 15000 }));
+    .then(m => m.delete({ timeout: 20000 }));
 
   await message.channel.send({ embed: secondEmbed }).then(m =>
     m.react("🎫").then(m => {
@@ -56,6 +56,22 @@ module.exports.run = async (client, message, args) => {
         .run(m.message.id, message.guild.id);
     })
   );
+
+  if (serverData.support_system === 0) {
+    return message
+      .reply(
+        `Pense à activer le support ticket avec la commande \`${serverData.prefix}s-switch\`.`
+      )
+      .then(msg => msg.delete({ timeout: 8000 }));
+  }
+
+  return message
+    .reply(
+      "le support ticket est " +
+        (serverData.support_system === 1 ? "activé" : "désactivé") +
+        " sur le serveur!"
+    )
+    .then(msg => msg.delete({ timeout: 3000 }));
 };
 
 module.exports.help = {

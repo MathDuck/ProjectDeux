@@ -1,35 +1,35 @@
 const serverQueryFactory = require("../../factories/serverQueryFactory");
 
 module.exports.run = async (client, message, args) => {
+  if (message.deletable) message.delete();
+
   let serverData = await serverQueryFactory
     .checkDataQuery(client)
     .get(message.guild.id);
 
-  if (message.deletable) message.delete();
-
-  let mazoStatus;
-  if (serverData.mazo_enabled === 1) mazoStatus = 0;
-  else mazoStatus = 1;
+  let supportStatus;
+  if (serverData.support_system === 1) supportStatus = 0;
+  else supportStatus = 1;
 
   await serverQueryFactory
-    .updateMazoSystemQuery(client)
-    .run(mazoStatus, serverData.mazo_configured, message.guild.id);
+    .updateSupportSystemQuery(client)
+    .run(supportStatus, message.guild.id);
 
   return message
     .reply(
-      "le mazo est " +
-        (mazoStatus === 1 ? "activé" : "désactivé") +
+      "le support ticket est " +
+        (supportStatus === 1 ? "activé" : "désactivé") +
         " sur le serveur!"
     )
     .then(msg => msg.delete({ timeout: 3000 }));
 };
 
 module.exports.help = {
-  name: "mazo-switch",
-  aliases: ["mswitch"],
-  description: "Activer/Désactiver le mazo sur le serveur.",
+  name: "support-switch",
+  aliases: ["s-switch"],
+  description: "Active/Désactive le support.",
   usage: "",
-  category: "Jeux"
+  category: "Support"
 };
 
 module.exports.requirements = {
